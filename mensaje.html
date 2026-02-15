@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(180deg, #ffdde1 0%, #ee9ca7 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* FONDO DE CORAZONES (Reutilizado para coherencia) */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.4);
+            animation: floatUp 15s linear infinite;
+            z-index: -1;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        /* CARTA / CONTENEDOR DEL MENSAJE */
+        .message-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 4px double #ff9a9e; /* Borde doble elegante */
+            border-radius: 30px;
+            padding: 40px 30px;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(255, 105, 135, 0.3);
+            position: relative;
+        }
+
+        /* Decoración de esquina (broche) */
+        .message-card::before {
+            content: '💌';
+            font-size: 3rem;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b81;
+            font-size: 2rem;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        p {
+            color: #636e72;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Resaltar partes importantes */
+        .highlight {
+            color: #e84393;
+            font-weight: 700;
+        }
+
+        /* BOTÓN PULSANTE */
+        .btn-start {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(255, 118, 117, 0.4);
+            animation: pulse 2s infinite;
+            text-decoration: none; /* Por si usamos <a> */
+            transition: transform 0.3s;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #ff6b81, #ff9a9e);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 118, 117, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 118, 117, 0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="hearts-container"></div>
+
+    <div class="message-card animate__animated animate__zoomIn">
+        <h1>💖✨ Bienvenida a los<br>6 Desafíos del Amor ✨💖</h1>
+        
+        <p>Hoy no es un día cualquiera…<br>
+        Hoy has sido elegida como la <span class="highlight">única participante</span> de un evento muy especial.</p>
+
+        <p>En este San Valentín, tendrás que atravesar <strong>6 minijuegos</strong>.<br>
+        Cada uno guardará recuerdos, risas y pequeñas pruebas que solo alguien con tu corazón podría superar. 💕</p>
+
+        <p>No se trata de ganar… se trata de <strong>recordar y sentir</strong>.</p>
+        
+        <p>Pero cuidado… porque en cada prueba habrá pistas y tal vez alguna confesión escondida. 💌</p>
+
+        <p>Respira profundo… Sonríe…<br>
+        Y prepárate, porque esta historia tiene un final hecho solo para ti.</p>
+
+        <a href="lobby.html" class="btn-start">
+            🎮💗 Que comiencen los juegos
+        </a>
+    </div>
+
+    <script>
+        // Script simple para generar corazones de fondo
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's'; 
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 500);
+    </script>
+</body>
+</html>

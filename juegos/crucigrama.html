@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crucigrama de Amor ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffeaa7;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 300px 300px;
+            gap: 20px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 1300px;
+            width: 98%;
+            height: 95vh;
+            border: 4px solid #fff;
+        }
+
+        /* TABLERO */
+        .board-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+            border-radius: 15px;
+            padding: 10px;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #ff6b81;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        /* GRID 15x15 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(15, 30px); /* Ajustado para pantallas estándar */
+            grid-template-rows: repeat(15, 30px);
+            gap: 2px;
+            background: #2d3436;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .cell { background: #fff; position: relative; border-radius: 2px; }
+        .cell.black { background: #2d3436; pointer-events: none; }
+
+        .cell input {
+            width: 100%; height: 100%; border: none; text-align: center;
+            font-size: 0.9rem; font-weight: 800; text-transform: uppercase;
+            outline: none; background: transparent; color: #2d3436; padding: 0;
+        }
+        .cell input:focus { background: #ffeaa7; color: #d63031; }
+
+        .cell .num {
+            position: absolute; top: 0; left: 1px;
+            font-size: 7px; color: #ff7675; font-weight: bold; pointer-events: none;
+        }
+
+        /* PISTAS */
+        .clues-column {
+            display: flex; flex-direction: column;
+            background: #fff; border-radius: 15px; padding: 15px;
+            overflow-y: auto; border: 2px solid #f0f0f0;
+        }
+        
+        .clues-column h3 {
+            font-size: 1.1rem; margin-top: 0; padding-bottom: 10px;
+            border-bottom: 3px solid #eee; display: flex; align-items: center; gap: 8px;
+        }
+
+        .h-col h3 { color: #0984e3; border-color: #0984e3; }
+        .v-col h3 { color: #d63031; border-color: #d63031; }
+
+        .clue-item {
+            font-size: 0.8rem; margin-bottom: 6px; padding: 8px;
+            background: #fdfdfd; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03); transition: 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .h-col .clue-item:hover { border-left-color: #0984e3; background: #e3f2fd; transform: translateX(3px); }
+        .v-col .clue-item:hover { border-left-color: #d63031; background: #ffebee; transform: translateX(3px); }
+
+        /* Botón */
+        .btn-check {
+            grid-column: span 3; background: linear-gradient(45deg, #ff7675, #d63031);
+            color: white; border: none; padding: 12px; border-radius: 50px;
+            font-weight: bold; font-size: 1.2rem; cursor: pointer; 
+            box-shadow: 0 5px 15px rgba(214, 48, 49, 0.3); transition: 0.3s;
+        }
+        .btn-check:hover { transform: scale(1.02); }
+
+        /* Feedback */
+        .correct { background: #55efc4 !important; color: #006266 !important; }
+        .wrong { background: #ff7675 !important; color: white !important; }
+
+        /* Modal Win */
+        #win-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.98); z-index: 100;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container animate__animated animate__fadeIn">
+    
+    <div class="board-area">
+        <h1>Crucigrama 🧩</h1>
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <div class="clues-column h-col">
+        <h3><i class="fas fa-arrow-right"></i> Horizontales</h3>
+        <div id="h-clues-list"></div>
+    </div>
+
+    <div class="clues-column v-col">
+        <h3><i class="fas fa-arrow-down"></i> Verticales</h3>
+        <div id="v-clues-list"></div>
+    </div>
+
+    <button class="btn-check" onclick="checkAnswers()">VERIFICAR RESPUESTAS ✨</button>
+</div>
+
+<div id="win-modal">
+    <h1 style="font-size: 4rem; color: #ff6b81;">¡FELICIDADES! 💖</h1>
+    <p style="font-size: 1.5rem;">Nuestras palabras conectan perfecto.</p>
+    <a href="../lobby.html" style="background:#0984e3; color:white; padding:15px 40px; text-decoration:none; border-radius:30px; font-weight:bold; margin-top:20px;">Volver al Mapa</a>
+</div>
+
+<script>
+    // --- CONFIGURACIÓN DE PALABRAS ---
+    // d: dirección, r: fila (0-14), c: columna (0-14)
+    // He calculado las coordenadas para que no choquen mal.
+    
+    const wordsData = [
+        // --- 10 HORIZONTALES (Tus pistas nuevas) ---
+        { d:'h', r:0, c:0, w:'AMOR', clue:'1. Lo que empezó todo entre nosotros.' }, // Cruza con V-AMOR en la A
+        { d:'h', r:2, c:0, w:'ROMANCE', clue:'2. Nuestra historia tiene mucho de esto.' },
+        { d:'h', r:4, c:6, w:'CORAZON', clue:'3. Donde guardo todo lo que siento por ti.' },
+        { d:'h', r:6, c:0, w:'TEQUIERO', clue:'4. Las dos palabras que más te repito.' },
+        { d:'h', r:0, c:8, w:'ABRAZOS', clue:'5. Lo que más extraño cuando no estás.' }, // Cruza con V-ABRAZOS en la A
+        { d:'h', r:8, c:0, w:'BESAR', clue:'6. Lo que quiero hacer cuando te vea.' },
+        { d:'h', r:8, c:7, w:'LATIR', clue:'7. Lo que hace mi corazón cuando me miras.' },
+        { d:'h', r:10, c:1, w:'NOVIOS', clue:'8. Lo que somos y me encanta ser.' },
+        { d:'h', r:12, c:9, w:'CARIÑO', clue:'9. Lo que te doy en cada detalle.' }, // Cruza con V-CARIÑO en la C
+        { d:'h', r:14, c:0, w:'SIEMPRE', clue:'10. El tiempo que quiero estar contigo.' },
+
+        // --- 10 VERTICALES (Tus pistas anteriores) ---
+        { d:'v', r:0, c:0, w:'AMOR', clue:'11. Lo que siento por ti todos los días.' }, // Cruza con H-AMOR
+        { d:'v', r:0, c:8, w:'ABRAZOS', clue:'12. Lo que más quiero darte cuando te veo.' }, // Cruza con H-ABRAZOS
+        { d:'v', r:12, c:9, w:'CARIÑO', clue:'13. Lo que siempre intento demostrarte.' }, // Cruza con H-CARIÑO
+
+        // Las siguientes están distribuidas para rellenar huecos sin chocar:
+        { d:'v', r:0, c:5, w:'DESTINO', clue:'14. Lo que nos unió sin que lo planeáramos.' },
+        { d:'v', r:0, c:14, w:'LATIDOS', clue:'15. Se aceleran cuando te pienso.' },
+        { d:'v', r:6, c:2, w:'PROMESA', clue:'16. Algo que se cumple cuando se ama de verdad.' }, // Cruza con Q de TEQUIERO? No, T-E-Q. En pos 2 es Q. P-R-O... OK.
+        { d:'v', r:5, c:12, w:'ETERNOS', clue:'17. Así quiero que seamos tú y yo.' },
+        { d:'v', r:9, c:5, w:'BESITOS', clue:'18. Los que te mando incluso a la distancia.' },
+        { d:'v', r:8, c:11, w:'ILUSION', clue:'19. Lo que sentí desde que empezamos a hablar.' },
+        { d:'v', r:2, c:3, w:'CONTIGO', clue:'20. Donde quiero estar siempre.' }
+    ];
+
+    // --- GENERADOR DE TABLERO ---
+    const gridEl = document.getElementById('grid');
+    const hList = document.getElementById('h-clues-list');
+    const vList = document.getElementById('v-clues-list');
+
+    // Matriz de celdas
+    let gridMatrix = [];
+
+    // 1. Crear Tablero Negro 15x15
+    for(let r=0; r<15; r++){
+        let row = [];
+        for(let c=0; c<15; c++){
+            let div = document.createElement('div');
+            div.className = 'cell black';
+            gridEl.appendChild(div);
+            row.push(div);
+        }
+        gridMatrix.push(row);
+    }
+
+    // 2. Colocar Palabras
+    wordsData.forEach((item, index) => {
+        // Pista en lista
+        const li = document.createElement('div');
+        li.className = 'clue-item';
+        // Formato: Número en negrita + Texto
+        const dotIndex = item.clue.indexOf('.'); 
+        const num = item.clue.substring(0, dotIndex);
+        const txt = item.clue.substring(dotIndex + 1);
+        
+        li.innerHTML = `<strong>${num}.</strong>${txt}`;
+        li.onmouseenter = () => highlight(item, true);
+        li.onmouseleave = () => highlight(item, false);
+        
+        if(item.d === 'h') hList.appendChild(li);
+        else vList.appendChild(li);
+
+        // Dibujar en Grid
+        let r = item.r, c = item.c;
+        
+        // Poner número visual en la casilla inicial
+        if(!gridMatrix[r][c].querySelector('.num')) {
+            gridMatrix[r][c].innerHTML += `<span class="num">${num}</span>`;
+        }
+
+        for(let i=0; i<item.w.length; i++) {
+            let cell = gridMatrix[r][c];
+            cell.className = 'cell'; // Se vuelve blanca
+            
+            // Si ya hay input (cruce), no crear otro
+            if(!cell.querySelector('input')) {
+                let input = document.createElement('input');
+                input.maxLength = 1;
+                input.dataset.ans = item.w[i];
+                input.onkeyup = (e) => handleInput(e, item.d, r, c); // Pasar coords
+                cell.appendChild(input);
+            }
+            // Mover cursor
+            if(item.d === 'h') c++; else r++;
+        }
+    });
+
+    // --- LÓGICA ---
+    function handleInput(e, dir, r, c) {
+        let input = e.target;
+        input.value = input.value.toUpperCase();
+        if(input.value.length === 1) {
+            let nextR = r + (dir === 'v' ? 1 : 0);
+            let nextC = c + (dir === 'h' ? 1 : 0);
+            if(nextR < 15 && nextC < 15) {
+                let nextCell = gridMatrix[nextR][nextC];
+                let nextInp = nextCell.querySelector('input');
+                if(nextInp) nextInp.focus();
+            }
+        }
+    }
+
+    function highlight(item, active) {
+        let r = item.r, c = item.c;
+        for(let i=0; i<item.w.length; i++) {
+            let inp = gridMatrix[r][c].querySelector('input');
+            if(inp) {
+                // Azul para horizontal, Rojo para vertical
+                let color = item.d === 'h' ? '#e3f2fd' : '#ffebee';
+                inp.style.backgroundColor = active ? color : 'transparent';
+            }
+            if(item.d === 'h') c++; else r++;
+        }
+    }
+
+    function checkAnswers() {
+        const inputs = document.querySelectorAll('input');
+        let allCorrect = true;
+        inputs.forEach(inp => {
+            if(inp.value === inp.dataset.ans) {
+                inp.parentElement.classList.add('correct');
+                inp.parentElement.classList.remove('wrong');
+            } else {
+                allCorrect = false;
+                inp.parentElement.classList.add('wrong');
+            }
+        });
+        if(allCorrect) {
+            confetti({particleCount: 250, spread: 150});
+            localStorage.setItem('game_crucigrama', 'true');
+            setTimeout(() => {
+                document.getElementById('win-modal').style.display='flex';
+            }, 1000);
+        }
+    }
+</script>
+</body>
+</html>

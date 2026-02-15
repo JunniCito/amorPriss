@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #000; /* Fondo negro elegante para resaltar el texto */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        /* Contenedor del texto */
+        .message-box {
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #ff4d4d;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 77, 77, 0.6);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #ff9a9e;
+            font-weight: 600;
+        }
+
+        /* Efecto de escritura (Typing) */
+        .typing-effect {
+            border-right: 2px solid rgba(255,255,255,0.75);
+            white-space: nowrap;
+            overflow: hidden;
+            margin: 0 auto;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+
+        /* Botón Comenzar */
+        .btn-start {
+            margin-top: 40px;
+            background: transparent;
+            border: 2px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0; /* Oculto al inicio */
+            animation: fadeIn 2s forwards;
+            animation-delay: 3s; /* Aparece después de leer */
+        }
+
+        .btn-start:hover {
+            background: #ff4d4d;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255, 77, 77, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* Fondo de partículas sutiles */
+        .background-heart {
+            position: absolute;
+            color: rgba(255, 77, 77, 0.1);
+            font-size: 20rem;
+            z-index: 0;
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: white; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="background-heart">❤️</div>
+
+    <div class="message-box">
+        <h1 class="animate__animated animate__fadeInDown">Nota del Desarrollador</h1>
+        
+        <div class="animate__animated animate__fadeInUp animate__delay-1s">
+            <p>
+                Esta página fue hecha desde <span class="highlight">0</span>, manualmente.<br>
+                Cada línea de código fue escrita pensando en ti.
+            </p>
+            <p>
+                <span class="highlight">Junni</span> lo hizo con mucho esfuerzo y cariño.<br>
+                Por ahora, es su mayor proyecto individual.
+            </p>
+            <p style="font-size: 1.5rem; margin-top: 30px; font-style: italic;">
+                Espero que te guste...<br>
+                ¡Feliz San Valentín! 🌹
+            </p>
+        </div>
+
+        <a href="login.html" class="btn-start">Comenzar</a>
+    </div>
+
+</body>
+</html>
+

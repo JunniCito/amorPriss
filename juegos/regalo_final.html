@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz San Valentín! ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            text-align: center;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #d63031;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.3);
+            animation: pulse 2s infinite;
+        }
+
+        p.intro { font-size: 1rem; margin-bottom: 20px; color: #636e72; }
+
+        .gift-container {
+            perspective: 1500px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 600px; 
+            height: 400px; 
+            margin-bottom: 20px;
+        }
+
+        .gift-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .gift-box.open { transform: rotateY(180deg); }
+
+        .gift-front, .gift-back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .gift-front {
+            background: linear-gradient(135deg, #ff7675, #d63031);
+            border: 5px solid #fff;
+            z-index: 2;
+        }
+        .ribbon-icon { font-size: 5rem; margin-bottom: 10px; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); }
+        
+        .click-hint {
+            color: #d63031; background: #fff; 
+            padding: 8px 20px; border-radius: 50px;
+            font-weight: 800; font-size: 0.9rem; letter-spacing: 1px;
+            animation: bounce 2s infinite;
+        }
+
+        .gift-back {
+            background: #fff;
+            transform: rotateY(180deg); 
+            border: 4px solid #fdcb6e; 
+            padding: 10px;
+            overflow: hidden; 
+        }
+
+        .gift-back h2 {
+            font-family: 'Great Vibes', cursive;
+            color: #d63031; font-size: 2rem; margin: 0 0 10px 0;
+        }
+
+        .btn-restart {
+            margin-top: 20px;
+            background: transparent; color: #d63031; border: 1px solid #d63031;
+            padding: 8px 20px; border-radius: 30px; text-decoration: none; font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .btn-restart:hover { background: #d63031; color: white; }
+    </style>
+</head>
+<body>
+
+    <h1 class="animate__animated animate__fadeInDown">¡Para Ti, Mi Amor!</h1>
+    <p class="intro animate__animated animate__fadeIn">Toca el regalo para ver nuestra historia...</p>
+
+    <div class="gift-container" onclick="openGift()">
+        <div class="gift-box" id="box">
+            
+            <div class="gift-front">
+                <div class="ribbon-icon">🎁</div>
+                <div class="click-hint">TOCA AQUÍ</div>
+            </div>
+
+            <div class="gift-back">
+                <h2>Nuestra Historia ❤️</h2>
+                
+                <div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%;
+                     padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 0; margin-bottom: 0; overflow: hidden;
+                     border-radius: 8px; will-change: transform;">
+                    <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+                        src="https://www.canva.com/design/DAHBTwICYkg/pcjw9Im5-s-iHQpYDIqINQ/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="../index.html" class="btn-restart">Volver al Inicio</a>
+
+    <script>
+        window.onload = launchConfetti;
+
+        function openGift() {
+            const box = document.getElementById('box');
+            if (!box.classList.contains('open')) {
+                box.classList.add('open');
+                confetti({
+                    particleCount: 200,
+                    spread: 150,
+                    origin: { y: 0.6 },
+                    colors: ['#ff7675', '#fdcb6e', '#ffffff']
+                });
+            }
+        }
+
+        function launchConfetti() {
+            var duration = 2 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>

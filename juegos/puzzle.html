@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Puzzle ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(180deg, #ffdde1 0%, #ee9ca7 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 { font-family: 'Pacifico', cursive; color: #e84393; font-size: 2.2rem; margin-bottom: 10px; text-shadow: 2px 2px white; }
+        p { color: #636e72; font-weight: bold; margin-bottom: 20px; }
+
+        /* CONTENEDOR DEL PUZZLE */
+        #puzzle-container {
+            width: 320px;
+            height: 320px;
+            background: rgba(255,255,255,0.5);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3x3 */
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5px;
+        }
+
+        /* LAS PIEZAS */
+        .piece {
+            width: 100px; height: 100px;
+            background-image: url('../img/nuestra-foto.jpg'); /* <--- AQUÍ VA TU FOTO */
+            background-size: 300px 300px; /* Tamaño total del puzzle (3x100) */
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border: 2px solid white;
+        }
+        .piece:hover { transform: scale(0.98); }
+
+        /* La pieza vacía */
+        .empty { background: transparent !important; border: 2px dashed rgba(232, 67, 147, 0.3); cursor: default; }
+
+        /* Mensaje de victoria */
+        #win-msg {
+            display: none;
+            margin-top: 20px;
+        }
+        .btn-back {
+            background: #e84393; color: white; padding: 12px 30px;
+            border-radius: 30px; text-decoration: none; font-weight: bold;
+            display: inline-block; margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(232, 67, 147, 0.4);
+        }
+        
+        /* Clase para mostrar la foto completa al final */
+        .full-photo {
+             grid-template-columns: 1fr !important;
+             gap: 0 !important;
+             padding: 0 !important;
+             overflow: hidden;
+        }
+        .full-photo .piece {
+            width: 320px; height: 320px;
+            background-size: cover;
+            background-position: center !important;
+            border: none; border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Arma Nuestro Amor 🧩</h1>
+    <p>Toca las piezas para moverlas</p>
+
+    <div id="puzzle-container">
+        </div>
+
+    <div id="win-msg" class="animate__animated animate__bounceIn">
+        <h2 style="color: #e84393;">¡Lo lograste! 😍</h2>
+        <p>Juntos todo se ve mejor.</p>
+        <a href="../lobby.html" class="btn-back">Volver al Mapa</a>
+    </div>
+
+    <script>
+        // Configuración del tablero (3x3)
+        const rows = 3;
+        const cols = 3;
+        let emptyRow = 2;
+        let emptyCol = 2;
+        
+        // Estado resuelto y estado actual
+        const solvedState = ["0-0", "0-1", "0-2", "1-0", "1-1", "1-2", "2-0", "2-1", "empty"];
+        let currentState = [...solvedState];
+
+        const container = document.getElementById('puzzle-container');
+
+        // INICIAR JUEGO
+        initGame();
+
+        function initGame() {
+            // 1. Desordenar (Haciendo movimientos válidos al azar para que tenga solución)
+            for(let i=0; i<100; i++) { shuffleBoard(); }
+            // 2. Dibujar
+            renderBoard();
+        }
+
+        function renderBoard() {
+            container.innerHTML = "";
+            currentState.forEach((posId, index) => {
+                const piece = document.createElement('div');
+                piece.className = "piece";
+                
+                if(posId === "empty") {
+                    piece.classList.add("empty");
+                    // Actualizar posición del hueco
+                    emptyRow = Math.floor(index / cols);
+                    emptyCol = index % cols;
+                } else {
+                    // Calcular qué parte de la foto mostrar
+                    const [posR, posC] = posId.split('-');
+                    piece.style.backgroundPosition = `-${posC * 100}px -${posR * 100}px`;
+                    
+                    // Evento de click
+                    const currentRow = Math.floor(index / cols);
+                    const currentCol = index % cols;
+                    piece.onclick = () => tryMove(currentRow, currentCol);
+                }
+                container.appendChild(piece);
+            });
+        }
+
+        function tryMove(r, c) {
+            // Verificar si está al lado del hueco (arriba, abajo, izq, der)
+            const isAdjacent = (Math.abs(r - emptyRow) + Math.abs(c - emptyCol)) === 1;
+
+            if(isAdjacent) {
+                // Intercambiar en el array
+                const clickedIdx = r * cols + c;
+                const emptyIdx = emptyRow * cols + emptyCol;
+                [currentState[clickedIdx], currentState[emptyIdx]] = [currentState[emptyIdx], currentState[clickedIdx]];
+                
+                renderBoard();
+                checkWin();
+            }
+        }
+
+        function shuffleBoard() {
+            // Simular un click en un vecino aleatorio del hueco
+            const neighbors = [];
+            if(emptyRow > 0) neighbors.push({r: emptyRow-1, c: emptyCol});
+            if(emptyRow < rows-1) neighbors.push({r: emptyRow+1, c: emptyCol});
+            if(emptyCol > 0) neighbors.push({r: emptyRow, c: emptyCol-1});
+            if(emptyCol < cols-1) neighbors.push({r: emptyRow, c: emptyCol+1});
+
+            const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+            tryMove(randomNeighbor.r, randomNeighbor.c);
+        }
+
+        function checkWin() {
+            // Compara si el array actual es igual al resuelto
+            if (JSON.stringify(currentState) === JSON.stringify(solvedState)) {
+                
+                // --- GUARDAR PROGRESO ---
+                localStorage.setItem('game_puzzle', 'true');
+
+                // Mostrar foto completa y mensaje
+                container.innerHTML = '<div class="piece" style="background-image: url(\'../img/nuestra-foto.jpg\');"></div>';
+                container.classList.add('full-photo');
+                document.getElementById('win-msg').style.display = 'block';
+                document.querySelector('p').style.display = 'none'; // Ocultar instrucciones
+                
+                // Efecto de celebración simple
+                container.classList.add('animate__animated', 'animate__pulse');
+            }
+        }
+    </script>
+</body>
+</html>

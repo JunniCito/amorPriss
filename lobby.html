@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Nuestro Amor 🗺️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 99%, #fff0f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #57606f;
+            overflow-x: hidden; /* Evitar scroll horizontal */
+        }
+
+        /* FONDO DECORATIVO */
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(#ff7675 0.5px, transparent 0.5px), radial-gradient(#ff7675 0.5px, #fecfef 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        /* ENCABEZADO */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+            color: #ff6b81;
+            text-shadow: 2px 2px 0px #fff;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle { 
+            color: #ff6b81; 
+            font-weight: 700; 
+            background: rgba(255,255,255,0.6); 
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* BARRA DE PROGRESO */
+        .progress-wrapper {
+            background: #fff;
+            border-radius: 50px;
+            padding: 6px;
+            margin: 0 auto 30px auto;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(255, 154, 158, 0.3);
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 18px;
+            background: linear-gradient(90deg, #ff9a9e, #ff6b81);
+            border-radius: 50px;
+            width: 0%; /* Se llena con JS */
+            transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+        }
+
+        .heart-marker {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #e84393;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+            animation: beat 1s infinite;
+        }
+        @keyframes beat { 0%, 100% { transform: translateY(-50%) scale(1); } 50% { transform: translateY(-50%) scale(1.3); } }
+
+        /* GRID DE JUEGOS */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+            gap: 15px;
+            max-width: 450px;
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
+
+        /* TARJETAS */
+        .game-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            border-radius: 25px;
+            padding: 20px 10px;
+            text-align: center;
+            text-decoration: none;
+            color: #57606f;
+            position: relative;
+            border: 2px solid white;
+            box-shadow: 0 10px 20px rgba(255, 118, 117, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 118, 117, 0.25);
+            border-color: #ff9a9e;
+        }
+
+        /* Iconos de las tarjetas */
+        .icon-circle {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        h3 { font-size: 1rem; font-weight: 800; color: #2d3436; margin-bottom: 4px; }
+        span.desc { font-size: 0.75rem; color: #a4b0be; display: block; font-weight: 600; }
+
+        /* Colores específicos para cada juego */
+        .bg-kahoot { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+        .bg-puzzle { background: linear-gradient(135deg, #ff7675, #d63031); }
+        .bg-cruci { background: linear-gradient(135deg, #fdcb6e, #e17055); }
+        .bg-sopa { background: linear-gradient(135deg, #55efc4, #00b894); }
+        .bg-bingo { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+        .bg-final { background: linear-gradient(135deg, #e84393, #fd79a8); }
+
+        /* CHECK DE COMPLETADO */
+        .check-mark {
+            position: absolute;
+            top: 10px; right: 10px;
+            font-size: 1.2rem;
+            color: #2ed573;
+            display: none; /* Se activa con JS */
+            background: white;
+            border-radius: 50%;
+            width: 20px; height: 20px;
+            align-items: center; justify-content: center;
+        }
+
+        /* BOTÓN FLOTANTE SALIR */
+        .btn-logout {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background: #fff;
+            color: #ff7675;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .btn-logout:hover { transform: scale(1.1); background: #ff7675; color: white; }
+
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <header class="animate__animated animate__fadeInDown">
+        <h1>Nuestra Aventura 💖</h1>
+        <p class="subtitle">Completa los 6 desafíos</p>
+    </header>
+
+    <div class="progress-wrapper animate__animated animate__fadeIn">
+        <div class="progress-bar" id="progressBar">
+            <div class="heart-marker">❤️</div>
+        </div>
+    </div>
+
+    <div class="game-grid animate__animated animate__fadeInUp">
+        
+        <a href="juegos/kahoot.html" class="game-card" onclick="trackClick('kahoot')">
+            <div class="check-mark" id="check-kahoot">✔</div>
+            <div class="icon-circle bg-kahoot"><i class="fas fa-bolt"></i></div>
+            <h3>Kahoot Love</h3>
+            <span class="desc">Trivia Rápida</span>
+        </a>
+
+        <a href="juegos/puzzle.html" class="game-card" onclick="trackClick('puzzle')">
+            <div class="check-mark" id="check-puzzle">✔</div>
+            <div class="icon-circle bg-puzzle"><i class="fas fa-puzzle-piece"></i></div>
+            <h3>Puzzle</h3>
+            <span class="desc">Nuestra Foto</span>
+        </a>
+
+        <a href="juegos/crucigrama.html" class="game-card" onclick="trackClick('crucigrama')">
+            <div class="check-mark" id="check-crucigrama">✔</div>
+            <div class="icon-circle bg-cruci"><i class="fas fa-pencil-alt"></i></div>
+            <h3>Crucigrama</h3>
+            <span class="desc">Palabras Clave</span>
+        </a>
+
+        <a href="juegos/sopa.html" class="game-card" onclick="trackClick('sopa')">
+            <div class="check-mark" id="check-sopa">✔</div>
+            <div class="icon-circle bg-sopa"><i class="fas fa-search"></i></div>
+            <h3>Sopa de Letras</h3>
+            <span class="desc">Busca Amor</span>
+        </a>
+
+        <a href="juegos/bingo.html" class="game-card" onclick="trackClick('bingo')">
+            <div class="check-mark" id="check-bingo">✔</div>
+            <div class="icon-circle bg-bingo"><i class="fas fa-table"></i></div>
+            <h3>Bingo Love</h3>
+            <span class="desc">Momentos Juntos</span>
+        </a>
+
+        <a href="juegos/responde.html" class="game-card" onclick="trackClick('responde')">
+            <div class="check-mark" id="check-responde">✔</div>
+            <div class="icon-circle bg-final"><i class="fas fa-comment-heart"></i></div>
+            <h3>Confesionario</h3>
+            <span class="desc">Preguntas Finales</span>
+        </a>
+
+    </div>
+
+    <a href="index.html" class="btn-logout" onclick="localStorage.removeItem('isLoggedIn')">
+        <i class="fas fa-sign-out-alt"></i>
+    </a>
+
+    <script>
+        // --- SISTEMA DE PROGRESO ---
+        
+        // Lista de juegos
+        const games = ['kahoot', 'puzzle', 'crucigrama', 'sopa', 'bingo', 'responde'];
+        
+        // Cargar progreso al iniciar
+        window.onload = function() {
+            let completedCount = 0;
+            
+            games.forEach(game => {
+                // Verificamos si en localStorage existe "game_NOMBRE" = "true"
+                // (Esto lo guardaremos en cada juego individual cuando gane)
+                if(localStorage.getItem('game_' + game) === 'true') {
+                    document.getElementById('check-' + game).style.display = 'flex';
+                    completedCount++;
+                }
+            });
+
+            // Calcular porcentaje (Simulado un poco más alto para animar)
+            // Si quieres que sea real, usa: (completedCount / 6) * 100
+            let percent = (completedCount / 6) * 100;
+            if(percent > 5 && percent < 15) percent = 15; // Mínimo visual
+
+            // Animar la barra
+            setTimeout(() => {
+                document.getElementById('progressBar').style.width = percent + '%';
+            }, 300);
+
+            // Mensaje si completó todo
+            if(completedCount === 6) {
+                setTimeout(() => {
+                    alert("¡Felicidades mi amor! Has completado todo. ❤️\n¿Lista para tu regalo?");
+                    // Opcional: Redirigir a sorpresa final
+                    // window.location.href = "sorpresa.html";
+                }, 1000);
+            }
+        };
+
+        // Función auxiliar para simular click (opcional)
+        function trackClick(gameName) {
+            console.log("Entrando a: " + gameName);
+            // Aquí no marcamos como completado todavía, 
+            // eso se hace DENTRO de cada juego cuando gana.
+        }
+    </script>
+</body>
+</html>
