@@ -1,295 +1,112 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Ti ❤️</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- ESTILOS CUTE --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti ❤️</title>
 
-        body {
-            font-family: 'Quicksand', sans-serif; /* Letra redondita y legible */
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(180deg, #ffdde1 0%, #ee9ca7 100%);
-            overflow: hidden;
-            position: relative;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 
-        /* Corazones flotantes en el fondo */
-        .bg-heart {
-            position: absolute;
-            bottom: -100px;
-            color: rgba(255, 255, 255, 0.6);
-            animation: floatUp 10s linear infinite;
-            z-index: 0;
-            font-size: 2rem;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-        }
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* CONTENEDOR PRINCIPAL */
-        .container {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-            padding: 20px;
-            z-index: 10;
-        }
+body {
+    font-family: 'Quicksand', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, #ffdde1 0%, #ee9ca7 100%);
+    overflow: hidden;
+}
 
-        /* TARJETA BLANCA Y ROSA */
-        .form-box {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            border: 2px solid #fff;
-            padding: 40px 30px;
-            border-radius: 40px; /* Bordes muy redondos */
-            box-shadow: 0 20px 50px rgba(255, 118, 117, 0.3);
-            text-align: center;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+/* Corazones */
+.bg-heart {
+    position: absolute;
+    bottom: -100px;
+    color: rgba(255, 255, 255, 0.6);
+    animation: floatUp 10s linear infinite;
+    font-size: 2rem;
+}
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-110vh); opacity: 0; }
+}
 
-        /* TÍTULOS CURSIVOS */
-        h2 { 
-            font-family: 'Pacifico', cursive; /* Fuente estilo firma */
-            color: #ff6b81; 
-            font-size: 2.5rem;
-            margin-bottom: 5px; 
-            text-shadow: 2px 2px 0px #fff;
-        }
-        
-        p { color: #7f8fa6; margin-bottom: 25px; font-weight: 600; }
+.container {
+    text-align: center;
+    z-index: 10;
+}
 
-        /* INPUTS BONITOS */
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .full-width { grid-column: span 2; }
+.box {
+    background: rgba(255,255,255,0.9);
+    padding: 50px 30px;
+    border-radius: 40px;
+    box-shadow: 0 20px 50px rgba(255,118,117,0.3);
+}
 
-        .input-group { position: relative; }
-        
-        .input-group i { 
-            position: absolute; 
-            left: 20px; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            color: #ff9f43; /* Naranja pastel */
-            font-size: 1.1rem;
-        }
+h2 {
+    font-family: 'Pacifico', cursive;
+    color: #ff6b81;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
 
-        input {
-            width: 100%; 
-            padding: 15px 15px 15px 50px;
-            border: 2px solid #ffeaa7; 
-            border-radius: 50px; /* Forma de píldora */
-            background: #fff;
-            outline: none; 
-            color: #57606f;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            transition: 0.3s;
-        }
+p {
+    color: #7f8fa6;
+    margin-bottom: 25px;
+}
 
-        input:focus {
-            border-color: #ff6b81;
-            box-shadow: 0 0 15px rgba(255, 107, 129, 0.2);
-        }
+/* BOTÓN */
+button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-family: 'Pacifico', cursive;
+    cursor: pointer;
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    color: white;
+    transition: 0.3s;
+}
 
-        /* BOTONES DE CARAMELO */
-        button {
-            width: 100%; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 50px;
-            font-size: 1.1rem; 
-            font-family: 'Pacifico', cursive;
-            cursor: pointer;
-            transition: 0.3s; 
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .btn-login { 
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4); 
-            color: white; 
-            border: 2px solid white;
-        }
-        
-        .btn-register { 
-            background: linear-gradient(45deg, #a18cd1, #fbc2eb); 
-            color: white; 
-            border: 2px solid white;
-        }
-        
-        button:hover { 
-            transform: scale(1.05) translateY(-3px); 
-            box-shadow: 0 15px 25px rgba(255, 107, 129, 0.3);
-        }
-
-        /* TEXTO DE CAMBIO */
-        .switch-text { margin-top: 25px; font-size: 0.9rem; color: #747d8c; }
-        .switch-text span { 
-            color: #ff6b81; 
-            font-weight: 800; 
-            cursor: pointer; 
-            background: #ffeaa7;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 5px;
-        }
-
-        .hidden { display: none !important; }
-        
-        /* Animación suave */
-        .fade-in { animation: fadeIn 0.6s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    </style>
+button:hover {
+    transform: scale(1.1);
+}
+</style>
 </head>
+
 <body>
 
-    <div id="hearts-container"></div>
+<div id="hearts-container"></div>
 
-    <div class="container">
-        
-        <div id="login-box" class="form-box fade-in">
-            <h2>Hola Princesa 👑</h2>
-            <p>Ingresa la clave de nuestro amor</p>
-            
-            <form id="formLogin">
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <i class="fas fa-heart" style="color: #ff6b81;"></i>
-                    <input type="text" id="loginUser" placeholder="Tu Usuario" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-key" style="color: #a29bfe;"></i>
-                    <input type="password" id="loginPass" placeholder="Contraseña Secreta" required>
-                </div>
-                <button type="submit" class="btn-login">Entrar al Castillo</button>
-            </form>
-
-            <p class="switch-text">
-                ¿No tienes tu pase VIP? 
-                <span onclick="switchForm('register')">Regístrate</span>
-            </p>
-        </div>
-
-        <div id="register-box" class="form-box fade-in hidden">
-            <h2>Contrato de Amor 💌</h2>
-            <p>Llénalo con cariño...</p>
-            
-            <form id="formRegister" class="form-grid">
-                
-                <div class="input-group">
-                    <i class="fas fa-user-circle"></i>
-                    <input type="text" placeholder="Nombre" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-star"></i>
-                    <input type="text" placeholder="Apellido" required>
-                </div>
-
-                <div class="input-group full-width">
-                    <i class="fas fa-birthday-cake" style="color: #fab1a0;"></i>
-                    <input type="text" placeholder="Cumpleaños (DD/MM)" onfocus="(this.type='date')" onblur="(this.type='text')">
-                </div>
-
-                <div class="input-group full-width">
-                    <i class="fas fa-ring" style="color: #fdcb6e;"></i>
-                    <input type="text" placeholder="¿Quién es tu novio?" required>
-                </div>
-
-                <div class="input-group full-width">
-                    <i class="fas fa-heart-circle-check" style="color: #ff7675;"></i>
-                    <input type="text" id="regUser" placeholder="Crea un Usuario" required>
-                </div>
-                <div class="input-group full-width">
-                    <i class="fas fa-lock" style="color: #6c5ce7;"></i>
-                    <input type="password" id="regPass" placeholder="Crea una Contraseña" required>
-                </div>
-
-                <button type="submit" class="btn-register full-width">Firmar Contrato 🖊️</button>
-            </form>
-
-            <p class="switch-text">
-                ¿Ya firmaste? 
-                <span onclick="switchForm('login')">Volver</span>
-            </p>
-        </div>
-
+<div class="container">
+    <div class="box">
+        <h2>Hola Princesa 👑</h2>
+        <p>Tengo algo especial para ti 💖</p>
+        <button onclick="entrar()">Entrar 💌</button>
     </div>
+</div>
 
-    <script>
-        // --- GENERADOR DE CORAZONES EN EL FONDO ---
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('bg-heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 5 + 's'; // Entre 5 y 8s
-            heart.style.fontSize = Math.random() * 20 + 20 + 'px'; // Tamaño variable
-            
-            document.getElementById('hearts-container').appendChild(heart);
+<script>
+// corazones
+function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('bg-heart');
+    heart.innerHTML = '❤️';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = Math.random() * 3 + 5 + 's';
+    heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 8000);
+}
+setInterval(createHeart, 600);
 
-            // Eliminar corazones viejos para no llenar la memoria
-            setTimeout(() => { heart.remove(); }, 8000);
-        }
-        setInterval(createHeart, 600); // Crear uno cada medio segundo
+// botón entrar
+function entrar(){
+    window.location.href = "mensaje.html";
+}
+</script>
 
-        // --- LÓGICA DE NAVEGACIÓN (IGUAL QUE ANTES) ---
-        function switchForm(view) {
-            const loginBox = document.getElementById('login-box');
-            const regBox = document.getElementById('register-box');
-            if (view === 'register') {
-                loginBox.classList.add('hidden');
-                regBox.classList.remove('hidden');
-            } else {
-                regBox.classList.add('hidden');
-                loginBox.classList.remove('hidden');
-            }
-        }
-
-        // REGISTRO
-        document.getElementById('formRegister').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const user = document.getElementById('regUser').value;
-            const pass = document.getElementById('regPass').value;
-
-            localStorage.setItem('sanValentin_user', user);
-            localStorage.setItem('sanValentin_pass', pass);
-
-            // Simulación cute
-            const btn = document.querySelector('.btn-register');
-            btn.innerHTML = '💖 Guardando con amor...';
-            setTimeout(() => {
-                alert("¡Bienvenida a mi vida! 💕\nAhora inicia sesión.");
-                switchForm('login');
-                btn.innerHTML = 'Firmar Contrato 🖊️';
-            }, 1500);
-        });
-
-        // LOGIN
-        document.getElementById('formLogin').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const inputUser = document.getElementById('loginUser').value;
-            const inputPass = document.getElementById('loginPass').value;
-            const storedUser = localStorage.getItem('sanValentin_user');
-            const storedPass = localStorage.getItem('sanValentin_pass');
-
-            if ((inputUser === storedUser && inputPass === storedPass) || (inputUser === "amor" && inputPass === "1402")) {
-                localStorage.setItem('isLoggedIn', 'true');
-                const btn = document.querySelector('.btn-login');
-                btn.innerHTML = '✨ Abriendo el corazón...';
-                setTimeout(() => { window.location.href = "mensaje.html"; }, 1500);
-            } else {
-                alert("Uy, esa no es la clave 💔. Intenta de nuevo princesa.");
-            }
-        });
-    </script>
 </body>
 </html>
